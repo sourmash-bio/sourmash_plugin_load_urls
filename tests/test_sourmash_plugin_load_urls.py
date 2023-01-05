@@ -18,6 +18,7 @@ def test_run_sourmash():
 
 
 def test_load_sig_http():
+    # test remote loading of a signature file
     url47 = remote_loc + '47.fa.sig'
     sig47 = utils.get_test_data('47.fa.sig')
 
@@ -32,3 +33,20 @@ def test_load_sig_http():
     local_sig = siglist[0]
 
     assert local_sig == remote_sig
+
+
+def test_load_manifest():
+    # test remote loading of a CSV manifest
+    mf_url = remote_loc + 'a-manifest.csv'
+
+    remote_idx = sourmash.load_file_as_index(mf_url)
+    assert len(remote_idx) == 2
+
+    sig47 = utils.get_test_data('47.fa.sig')
+    sig63 = utils.get_test_data('63.fa.sig')
+
+    ss47 = list(sourmash.load_file_as_signatures(sig47))[0]
+    ss63 = list(sourmash.load_file_as_signatures(sig63))[0]
+
+    assert ss47 in remote_idx.signatures()
+    assert ss63 in remote_idx.signatures()
