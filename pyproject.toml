@@ -5,7 +5,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 version = "0.2"
 
-dependencies = ["fsspec", 'sourmash>=4.6.1,<5']
+dependencies = ["fsspec", "requests", "aiohttp", 'sourmash>=4.6.1,<5']
 
 [metadata]
 license = { text = "BSD 3-Clause License" }
