@@ -23,17 +23,20 @@ def load_sketches(location, *args, **kwargs):
             db = MultiIndex.load((lidx,), (None,), parent=None)
 
             return db
-    except (IOError, sourmash.exceptions.SourmashError):
+    except (IOError, sourmash.exceptions.SourmashError, FileNotFoundError):
         pass
 
     # if we can't read it as a JSON signature, try it as a manifest.
     # CTB: not sure why we can't keep it open in the above block and
     # then do a seek here? But anyway...
 
-    of = fsspec.open(location, 'rt')
-    with of as fp:
-        mf = BaseCollectionManifest.load_from_csv(fp)
-        return StandaloneManifestIndex(mf, location, prefix='')
+    try:
+        of = fsspec.open(location, 'rt')
+        with of as fp:
+            mf = BaseCollectionManifest.load_from_csv(fp)
+            return StandaloneManifestIndex(mf, location, prefix='')
+    except (IOError, FileNotFoundError):
+        pass
 
 
 # default priority is ok here
