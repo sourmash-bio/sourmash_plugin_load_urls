@@ -23,7 +23,7 @@ def load_sketches(location, *args, **kwargs):
             db = MultiIndex.load((lidx,), (None,), parent=None)
 
             return db
-    except sourmash.exceptions.SerdeError:
+    except (IOError, sourmash.exceptions.SourmashError):
         pass
 
     # if we can't read it as a JSON signature, try it as a manifest.
